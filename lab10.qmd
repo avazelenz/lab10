@@ -1,12 +1,15 @@
 ---
-title: "Lab 02: Distances and the Border Zone"
-subtitle: 'Ecosystem Science and Sustainability 523c'
+title: "Lab 10: Distances and the Border Zone"
 author: Ava Zelenz
-date: "2025-05-01"
-format: html
+format: 
+  html:
+    code-fold: true
+    toc: true
 execute: 
   echo: true
 ---
+
+
 
 ```{r}
 # spatial data science
@@ -14,9 +17,11 @@ library(tidyverse)
 library(sf)
 library(units)
 
+library(devtools)
+library(remotes)
+
 # Data
 devtools::install_github("mikejohnson51/AOI")
-
 library(AOI)
 
 # Visualization
@@ -31,7 +36,6 @@ library(knitr)
 eqdc <- '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
 
 remotes::install_github("mikejohnson51/AOI")
-
 
 ```
 
@@ -177,7 +181,7 @@ flextable(mex_farthest_cities)
 ```{r}
 canada <- countries %>% filter(name_long == "Canada")
 
-cities_proj <- st_transform(cities_sf, crs = 5070)
+
 canada_proj <- st_transform(canada, crs = 5070)
 
 canada_border <- st_boundary(canada_proj)
@@ -189,7 +193,6 @@ cities_proj$dist_to_state_m <- st_distance(cities_proj, state_borders) |>
   apply(1, min)
 
 can_farthest_cities <- cities_proj %>%
-  st_drop_geometry() %>%
   mutate(dist_to_state_km = round(as.numeric(dist_to_canada_m) / 1000, 1)) %>%
   arrange(desc(dist_to_state_km)) %>%
   select(city, state = state_name, distance = dist_to_state_km) %>%

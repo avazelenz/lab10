@@ -1,9 +1,7 @@
----
 project: 
   title: "Lab 10 ESS 330"
   output-dir: docs
   type: website
 format: 
-  html: 
+  html:
     self-contained: true
----
